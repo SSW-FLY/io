@@ -1,6 +1,8 @@
 package itcode.time;
 
 import itcode.handler.TimeServerHandler;
+import itcode.handler.TimeServerHandlerExecutePool;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -11,12 +13,13 @@ import java.net.Socket;
  */
 public class TimeServer {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         int port = 8080;
         try (ServerSocket server = new ServerSocket(port)) {
+            TimeServerHandlerExecutePool singleExecutor = new TimeServerHandlerExecutePool(50,1000);
             for (; ; ) {
                 Socket socket = server.accept();
-                new Thread(new TimeServerHandler(socket)).start();
+                singleExecutor.execute(new TimeServerHandler(socket));
             }
         } catch (Exception e) {
             e.printStackTrace();

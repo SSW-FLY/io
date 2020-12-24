@@ -34,7 +34,7 @@ public class TimeServerHandler implements Runnable {
                 if (body == null) {
                     break;
                 }
-                System.out.println(body);
+                System.out.println(body + Thread.currentThread().getName());
                 out.println(System.currentTimeMillis());
             }
 
