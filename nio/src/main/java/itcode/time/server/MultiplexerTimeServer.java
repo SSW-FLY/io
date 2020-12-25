@@ -1,4 +1,4 @@
-package itcode.server;
+package itcode.time.server;
 
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
@@ -49,7 +49,7 @@ public class MultiplexerTimeServer implements Runnable {
                     key = it.next();
                     it.remove();
                     try {
-                        //handleInput(key);
+                        handleInput(key);
                     } catch (Exception e) {
                         e.printStackTrace();
                         if (key != null) {
@@ -61,6 +61,7 @@ public class MultiplexerTimeServer implements Runnable {
                     }
                 }
             } catch (Exception e) {
+                System.exit(1);
                 e.printStackTrace();
             }
         }
@@ -85,13 +86,14 @@ public class MultiplexerTimeServer implements Runnable {
             if (key.isReadable()) {
                 SocketChannel sc = (SocketChannel) key.channel();
                 ByteBuffer buffer = ByteBuffer.allocate(1024);
+                //将管道中的数据放到buffer中
                 int read = sc.read(buffer);
                 if (read > 0) {
                     buffer.flip();
                     byte[] bytes = new byte[buffer.remaining()];
                     buffer.get(bytes);
                     String body = new String(bytes, StandardCharsets.UTF_8);
-                    System.out.println("body" + body);
+                    System.out.println("body: " + body);
                     String currentTime = "QUERY TIME ORDER".equalsIgnoreCase(body) ? new Date(System.currentTimeMillis()).toString() : "BAD ORDER";
                     doWrite(sc, currentTime);
                 } else if (read < 0) {

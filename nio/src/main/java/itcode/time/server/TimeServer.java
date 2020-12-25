@@ -1,4 +1,4 @@
-package itcode.server;
+package itcode.time.server;
 
 /**
  * @author imp
