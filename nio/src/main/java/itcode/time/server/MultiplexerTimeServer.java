@@ -14,6 +14,7 @@ import java.util.*;
  * @date 2020/12/25
  */
 public class MultiplexerTimeServer implements Runnable {
+
     private Selector selector;
 
     private ServerSocketChannel serverSocketChannel;
@@ -74,7 +75,12 @@ public class MultiplexerTimeServer implements Runnable {
         }
     }
 
-
+    /**
+     * 做处理，如果是有新的连接，就将新的对象注册到选择器，如果是读数据，从管道中读出数据，处理完后在将数据写到管道中
+     *
+     * @param key
+     * @throws Exception
+     */
     private void handleInput(SelectionKey key) throws Exception {
         if (key.isValid()) {
             if (key.isAcceptable()) {
@@ -94,7 +100,8 @@ public class MultiplexerTimeServer implements Runnable {
                     buffer.get(bytes);
                     String body = new String(bytes, StandardCharsets.UTF_8);
                     System.out.println("body: " + body);
-                    String currentTime = "QUERY TIME ORDER".equalsIgnoreCase(body) ? new Date(System.currentTimeMillis()).toString() : "BAD ORDER";
+                    String currentTime = "QUERY TIME ORDER".equalsIgnoreCase(body) ? new Date(
+                        System.currentTimeMillis()).toString() : "BAD ORDER";
                     doWrite(sc, currentTime);
                 } else if (read < 0) {
                     key.cancel();
@@ -104,7 +111,7 @@ public class MultiplexerTimeServer implements Runnable {
         }
     }
 
-    private void doWrite(SocketChannel socketChannel, String response) throws Exception{
+    private void doWrite(SocketChannel socketChannel, String response) throws Exception {
         if (response != null && response.trim().length() > 0) {
             byte[] bytes = response.getBytes();
             ByteBuffer buffer = ByteBuffer.allocate(bytes.length);

@@ -53,7 +53,7 @@ public class TimeClientHandle implements Runnable {
                 selector.select(1000);
                 Set<SelectionKey> keys = selector.selectedKeys();
                 Iterator<SelectionKey> it = keys.iterator();
-                SelectionKey key = null;
+                SelectionKey key;
                 while (it.hasNext()) {
                     key = it.next();
                     it.remove();
@@ -97,6 +97,7 @@ public class TimeClientHandle implements Runnable {
             }
             if (key.isReadable()) {
                 ByteBuffer buffer = ByteBuffer.allocate(1024);
+                //把管道的数据写到buffer中
                 int read = sc.read(buffer);
                 if (read > 0) {
                     buffer.flip();
