@@ -23,6 +23,7 @@ public class TimeClientHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        //将数据写入
         ctx.writeAndFlush(firstMessage);
     }
 
