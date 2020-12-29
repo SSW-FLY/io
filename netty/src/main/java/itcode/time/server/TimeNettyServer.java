@@ -8,6 +8,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import itcode.time.handler.TimeServerHandler;
 
 /**
  * @author imp
@@ -37,7 +38,7 @@ public class TimeNettyServer {
 
         @Override
         protected void initChannel(SocketChannel socketChannel) throws Exception {
-            socketChannel.pipeline().addLast(null);
+            socketChannel.pipeline().addLast(new TimeServerHandler());
         }
     }
 
