@@ -33,11 +33,11 @@ public class TimeNettyServer {
         }
     }
 
-    private class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
+    private static class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
 
         @Override
         protected void initChannel(SocketChannel socketChannel) throws Exception {
-            socketChannel.pipeline().addLast(new TimeServerHandler());
+            socketChannel.pipeline().addLast(null);
         }
     }
 
