@@ -40,7 +40,7 @@ public class MultiThreadEchoServerReactor {
     }
 
 
-    class SubReactor implements Runnable {
+    static class SubReactor implements Runnable {
         final Selector selector;
 
         public SubReactor(Selector selector) {
@@ -53,9 +53,7 @@ public class MultiThreadEchoServerReactor {
                 while (!Thread.interrupted()) {
                     selector.select();
                     Set<SelectionKey> keys = selector.selectedKeys();
-                    Iterator<SelectionKey> iterator = keys.iterator();
-                    while (iterator.hasNext()) {
-                        SelectionKey sk = iterator.next();
+                    for (SelectionKey sk : keys) {
                         dispatch(sk);
                     }
                     keys.clear();
